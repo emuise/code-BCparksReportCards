@@ -1,0 +1,15 @@
+DataExploration.gdb/
+downloadedGDBs/
+focusarea/
+geodatabases/
+ImportLog/
+Index/
+info/
+NA_boundaries/
+outputs/
+ParksExploration/
+RasterFunctionTemplates/
+scratch/
+zipped/
+.Rhistory
+complexes.csv
