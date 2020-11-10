@@ -13,3 +13,6 @@ scratch/
 zipped/
 .Rhistory
 complexes.csv
+.Rproj.user/
+.ipynb_checkpoints/
+
