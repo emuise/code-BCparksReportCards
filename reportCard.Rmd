@@ -1,0 +1,135 @@
+---
+title: "How does Garabladi Complex compare to its surroundings?"
+output: html_document
+---
+
+```{r, echo=FALSE, out.height="45%"}
+knitr::include_graphics("C:/Users/evanmuis.stu/Sync/Masters/Data/outputs/Gar/plots/Gar_PACE.png")
+```
+
+```{r, echo=FALSE, results='hide', message = F, warning = F}
+library(tidyverse)
+library(scico)
+```
+Land cover is similar to its surroundings.\
+Forest cover is lower than its surroundings.\
+Forest disturbances are lower than its surroundings.\
+Forest structure is comparable to its surroundings.\
+Human habitation is lower than its surroundings.\
+Terrain is different than its surroundings.\
+
+# Land Cover
+
+```{r, echo=FALSE, out.height="45%"}
+knitr::include_graphics("C:/Users/evanmuis.stu/Sync/Masters/Data/outputs/Gar/plots/gar_lcc_map.png")
+```
+
+```{r, echo=FALSE, results = "hide", message = FALSE}
+Df <- read_csv("C:/Users/evanmuis.stu/Sync/Masters/Data/hmmDf.csv")
+
+
+##Calculating percent land cover in PPA vs. GPE in 2015 
+land_cover_2015 <- Df %>% 
+  filter(var == "HMM", year == "2015", class_name != "unclassifed")
+
+
+##Manning complex 
+mann <- land_cover_2015 %>% 
+  filter(park == "Gar") %>% 
+  group_by(ppa_gpe) %>%
+  mutate(percent_lcc = value / sum(value) * 100)
+#mann
+
+mann_graph <- ggplot(mann, aes(x = fct_rev(ppa_gpe), y = percent_lcc, fill = fct_rev(fct_reorder(class_name, percent_lcc)))) +
+  geom_bar(stat = "identity", position = "stack") +
+  labs(x = "Land Cover Class", y = "Percent of Total Area") +
+  guides(fill = guide_legend(reverse = TRUE)) +
+  scale_fill_scico_d(palette = "batlow") +
+    theme_void() +
+  theme() +  
+  theme(text = element_text(size = 13)) +
+  coord_polar(theta = "y") +
+  labs(fill = "Land Cover Class")
+
+mann_graph
+```
+
+# Forest Cover and Fragmentation
+
+
+
+# Forest Disturbances
+
+```{r, echo=FALSE, out.height="45%"}
+knitr::include_graphics("C:/Users/evanmuis.stu/Sync/Masters/Data/outputs/Gar/plots/Disturbance Map.png")
+```
+
+```{r, echo=FALSE, results = "hide", message = FALSE}
+#Manning Complex disturbance analysis 
+mannDist2015 <- read_csv("outputs/disturbance.csv") %>%
+  filter(class != "Ag", class != "No Disturbance", parkName == "Gar")
+mannDist2015$ppa_gpe <- fct_rev(mannDist2015$ppa_gpe) 
+
+
+#plot
+mann_Dist15_graph <- mannDist2015 %>% ggplot(aes(x = reorder(class, per_dist), 
+                                                 y= per_dist, 
+                                                 fill = class, 
+                                                 colour = fct_rev(ppa_gpe))) +
+  geom_bar(position = "dodge", stat = "identity") + theme_bw() +
+  theme(legend.title = element_blank()) +
+  labs(y = "% of Area Disturbed", x = "Disturbance") +
+  theme(text = element_text(size = 13))+
+  coord_flip()
+
+mann_Dist15_graph <- mann_Dist15_graph + scale_fill_manual(values=c("#38A800", "#005CE6", "#000000", "#FFA900"), guide = F) + 
+  scale_colour_manual(values = c("black", "blue")) +
+  guides(colour = guide_legend(reverse = TRUE))
+
+mann_Dist15_graph
+```
+
+
+# Forest Structural Metrics
+
+```{r, echo=FALSE, out.height="45%"}
+knitr::include_graphics("C:/Users/evanmuis.stu/Sync/Masters/Data/outputs/Gar/plots/height.png")
+```
+
+```{r, echo=FALSE, results = "hide", message = FALSE}
+gar_struct <- read_csv("outputs/gar_structure_2015.csv")
+
+varName = unique(gar_struct$varName)
+
+var2s = c("Biomass (t/ha)", "Cover (%)", "Height (m)", "Volume (m^3ha^-1)", "Structure (Elevation Covariance)", "Basal Area (m^2ha)")
+
+divideBy = c(100, 100, 1000, 10, 1000, 100)
+
+renameTib = tibble(varName, var2s, divideBy)
+
+gar_struct <- full_join(gar_struct, renameTib)
+
+gar_struct <- gar_struct %>% mutate(adjustMean = MEAN / divideBy)
+
+
+
+gar_struct %>% ggplot(aes(x = fct_rev(ppa_gpe), y = adjustMean)) +
+  geom_boxplot(outlier.alpha = 0) +
+  geom_jitter(position = position_jitter(0.2), alpha = 0.25) +
+  facet_wrap(var2s ~ ., scale = "free",
+              labeller = labeller(var2s = label_wrap_gen(25))) + 
+  labs(x = "", y = "Mean") +
+  theme_bw() +
+  theme(legend.title = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.line = element_line(colour = "black"))
+```
+
+# Human Habitation
+
+
+
+# Terrain
+

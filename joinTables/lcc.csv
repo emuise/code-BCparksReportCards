@@ -1,0 +1,14 @@
+class_val,class_name,relevel
+0,unclassifed,0
+20,water,1
+31,snow/ice,2
+32,rock/rubble,3
+33,exposed/barren land,4
+40,bryoid,5
+50,shrubland,6
+80,wetland,7
+81,wetland-treed,8
+100,herbs,9
+210,coniferous,10
+220,broadleaf,11
+230,mixed wood,12

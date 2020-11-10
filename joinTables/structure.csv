@@ -1,0 +1,10 @@
+var,var2s,divideBy
+basal_area,Basal Area (m^2ha),100
+elev_cv,Structure (Elevation Covariance),1000
+gross_stem_volume,Volume (m^3ha^-1),10
+loreys_height,Canopy Height (m),1000
+percentage_first_returns_above_2m,Canopy Cover (%),100
+total_biomass,Biomass (t/ha),100
+aspect,Aspect (°),1
+elevation,Elevation (m),1
+slope,Slope (°),1
