@@ -101,7 +101,7 @@ distDonutPlot <- function(inPark){
   newDir = file.path("outputs", inPark, "plots")
   dir.create(newDir, showWarnings = F)
   
-  saveLoc = file.path(newDir, "disturbance_plot_2.png")
+  saveLoc = file.path(newDir, "disturbance_plot.png")
   
   ggsave(saveLoc, figure, device = "png")
 
@@ -124,8 +124,9 @@ distYearlyPlot <- function(inPark){
     geom_col() +
     #geom_line(aes(x = year, y = cumulative)) +
     facet_grid(rows = vars(fct_rev(ppa_gpe))) +
-    scale_fill_scico_d(palette = "batlow") +
+    #scale_fill_scico_d(palette = "batlow") +
     #scale_fill_manual(values = c("#ff0000", "#009900", "#00a9e6", "#000000", "#c8c8c8")) +
+    scale_fill_manual(values = scico(6, palette = "batlow")[2:6]) +
     labs(fill = "Disturbance", x = "Year", y = "% of Landscape Disturbed") +
     theme_bw() +
     theme(panel.grid = element_blank())
@@ -142,7 +143,7 @@ distYearlyPlot <- function(inPark){
 parks <- unique(per_dist$park)
 
 #creates a double donut graph for each unique park
-figures = map(parks, distDonutPlot)
+donutFigs = map(parks, distDonutPlot)
 
 #creates a yearly disturbance graph for each unique park
-map(parks, distYearlyPlot)
+yearlyFigs = map(parks, distYearlyPlot)

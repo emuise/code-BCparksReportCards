@@ -5,37 +5,37 @@ vlce <- read_csv("C:/Users/evanmuis.stu/Sync/Masters/Data/outputCsvs/vlce.csv")
 vlceJoin <- read_csv("C:/Users/evanmuis.stu/Sync/Masters/Data/joinTables/lcc.csv")
 vlce <- left_join(vlce, vlceJoin)
 
+inPark = "Gar"
 
-##Calculating percent land cover in PPA vs. GPE in 2015
-land_cover_2015 <- vlce %>%
-  filter(year == "2015", class_val != 0, class_val != 20)
-
-lccPlot <- function(inPark){
-  filtered <- land_cover_2015 %>%
+fNoFplot <- function(inPark){
+  filtered <- vlce %>% 
+    filter(year == "2015", class_val != 0, class_val != 20) %>%
     filter(park == inPark) %>%
-    group_by(ppa_gpe) %>%
+    group_by(park, ppa_gpe) %>%
     mutate(percent_lcc = total_area / sum(total_area) * 100)
   
-  filtered$class_name <- fct_rev(fct_reorder(filtered$class_name, filtered$relevel, .fun = mean))
+  fNoF <- filtered %>% 
+    group_by(ppa_gpe, park, fNoF) %>%
+    summarize(percent_lcc = sum(percent_lcc))
   
-  figure <- ggplot(filtered, aes(x = fct_rev(ppa_gpe), y = percent_lcc, fill = class_name)) +
+  figure <- ggplot(fNoF, aes(x = fct_rev(ppa_gpe), y = percent_lcc, fill = fNoF)) +
     geom_bar(stat = "identity", position = "stack") +
-    guides(fill = guide_legend(reverse = TRUE)) +
-    scale_fill_scico_d(palette = "batlow") +
+    #guides(fill = guide_legend(reverse = TRUE)) +
+    scale_fill_manual(values = scico(11, palette = "batlow")[c(5, 8, 11)]) +
+    #scale_fill_scico_d(palette = "batlow") +
     theme_void() +
-    theme() +
     theme(text = element_text(size = 13)) +
     coord_polar(theta = "y") +
-    labs(fill = "Land Cover Class")
+    labs(fill = "Aggregate Land Cover Class")
   
   newDir = file.path("outputs", inPark, "plots")
   dir.create(newDir, showWarnings = F)
   
-  saveLoc = file.path(newDir, "lcc_plot.png")
+  saveLoc = file.path(newDir, "lcc_FnoF_plot.png")
   
   ggsave(saveLoc, figure, device = "png")
 }
 
 parks <- unique(vlce$park)
 
-map(parks, lccPlot)
+map(parks, fNoFplot)

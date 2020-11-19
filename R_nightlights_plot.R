@@ -1,22 +1,21 @@
 library(tidyverse)
 library(scico)
 
-vlce <- read_csv("C:/Users/evanmuis.stu/Sync/Masters/Data/outputCsvs/vlce.csv")
-vlceJoin <- read_csv("C:/Users/evanmuis.stu/Sync/Masters/Data/joinTables/lcc.csv")
-vlce <- left_join(vlce, vlceJoin)
+parkJoiner <-  read_csv("joinTables/parkNames.csv")
 
+#lights dataset
+lights <- read_csv("outputCsvs/nightlights.csv")
+lightJoiner <-  read_csv("joinTables/nightlights.csv")
+lights <- left_join(lights, lightJoiner)
+lights <- left_join(lights, parkJoiner)
 
-##Calculating percent land cover in PPA vs. GPE in 2015
-land_cover_2015 <- vlce %>%
-  filter(year == "2015", class_val != 0, class_val != 20)
-
-lccPlot <- function(inPark){
-  filtered <- land_cover_2015 %>%
+lightPlot <- function(inPark){
+  filtered <- lights %>%
     filter(park == inPark) %>%
     group_by(ppa_gpe) %>%
     mutate(percent_lcc = total_area / sum(total_area) * 100)
   
-  filtered$class_name <- fct_rev(fct_reorder(filtered$class_name, filtered$relevel, .fun = mean))
+  filtered$class_name <- fct_reorder(filtered$class_name, filtered$relevel, .fun = mean)
   
   figure <- ggplot(filtered, aes(x = fct_rev(ppa_gpe), y = percent_lcc, fill = class_name)) +
     geom_bar(stat = "identity", position = "stack") +
@@ -26,16 +25,16 @@ lccPlot <- function(inPark){
     theme() +
     theme(text = element_text(size = 13)) +
     coord_polar(theta = "y") +
-    labs(fill = "Land Cover Class")
+    labs(fill = "Nightlights Class")
   
   newDir = file.path("outputs", inPark, "plots")
   dir.create(newDir, showWarnings = F)
   
-  saveLoc = file.path(newDir, "lcc_plot.png")
+  saveLoc = file.path(newDir, "nightlights_plot.png")
   
   ggsave(saveLoc, figure, device = "png")
 }
 
-parks <- unique(vlce$park)
+parks <- unique(lights$park)
 
-map(parks, lccPlot)
+map(parks, lightPlot)
