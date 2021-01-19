@@ -1,18 +1,18 @@
 class_val,class,relevel
 0,No Disturbance,0
-1000,Untyped Disturbance,5
 1001,Fire,1
-1002,Harvesting,2
-1003,Non Stand-Replacing,3
-1004,Road,4
-1005,Ag,6
 1,Fire,1
-2,Harvesting,2
-3,Non Stand-Replacing,3
+1002,Harvesting,3
+2,Harvesting,3
+1003,Non Stand-Replacing,2
+3,Non Stand-Replacing,2
+1004,Road,4
 4,Road,4
+1000,Untyped Disturbance,5
 5,Untyped Disturbance,5
 6,Untyped Disturbance,5
 7,Untyped Disturbance,5
 8,Untyped Disturbance,5
 9,Untyped Disturbance,5
+1005,Ag,6
 10,Ag,6

@@ -20,13 +20,15 @@ lccPlot <- function(inPark){
   
   figure <- ggplot(filtered, aes(x = fct_rev(ppa_gpe), y = percent_lcc, fill = class_name)) +
     geom_bar(stat = "identity", position = "stack") +
-    guides(fill = guide_legend(reverse = TRUE)) +
+    guides(fill = guide_legend(reverse = F)) +
     scale_fill_scico_d(palette = "batlow") +
     theme_void() +
     theme() +
     theme(text = element_text(size = 13)) +
     coord_polar(theta = "y") +
-    labs(fill = "Land Cover Class")
+    labs(fill = "Land Cover Class") +
+    annotate("text", x = 0, y = 0, label = "PPA") +
+    annotate("text", x = 2.8, y = 25, label = "GPE")
   
   newDir = file.path("outputs", inPark, "plots")
   dir.create(newDir, showWarnings = F)

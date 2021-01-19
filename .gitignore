@@ -16,4 +16,7 @@ zipped/
 complexes.csv
 .Rproj.user/
 .ipynb_checkpoints/
-
+outputs_backup/
+pres2Figs/
+reportCards/
+RasterFunctionsHistory/

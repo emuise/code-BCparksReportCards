@@ -93,7 +93,7 @@ distDonutPlot <- function(inPark){
     geom_bar(stat = "identity", position = "stack") +
     theme_void() +
     coord_polar(theta = "y") +
-    scale_fill_scico_d(palette = "batlow") +
+    scale_fill_manual(values = c("#999999", scico(6, palette = "batlow")[2:6])) +
     #scale_fill_manual(values=c("#828282", "#ff0000", "#009900", "#00a9e6", "#000000", "#c8c8c8")) +
     #guides(fill = guide_legend(reverse = T)) +
     labs(fill = "Disturbance")
@@ -123,7 +123,7 @@ distYearlyPlot <- function(inPark){
   figure <- filtCumulative %>% ggplot(aes(x = year, y = proportion_of_landscape, fill = class)) +
     geom_col() +
     #geom_line(aes(x = year, y = cumulative)) +
-    facet_grid(rows = vars(fct_rev(ppa_gpe))) +
+    facet_grid(rows = vars(ppa_gpe)) +
     #scale_fill_scico_d(palette = "batlow") +
     #scale_fill_manual(values = c("#ff0000", "#009900", "#00a9e6", "#000000", "#c8c8c8")) +
     scale_fill_manual(values = scico(6, palette = "batlow")[2:6]) +
