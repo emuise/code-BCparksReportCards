@@ -49,6 +49,8 @@ terrainPlot <- function(inPark){
   ggsave(saveLoc, figure, device = "png")
 }
 
-parks <- unique(meanVars$park)
+valid_parks <- read_csv("joinTables/parknames.csv") %>% pull(processing_name)
 
-map(parks, terrainPlot)
+valid_parks <- valid_parks[file.exists(file.path("outputs", valid_parks, "rasters"))]
+
+map(valid_parks, terrainPlot)

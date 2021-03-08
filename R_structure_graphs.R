@@ -2,24 +2,26 @@ library(tidyverse)
 library(scico)
 library(rstatix)
 
-inPark = "Gar"
-
-parkJoiner <-  read_csv("joinTables/parkNames.csv")
+park_join <- read_csv("joinTables/parkNames.csv") %>%
+  rename(park = processing_name)
 
 #mean variables by subzone
-meanVars <- read_csv("outputCsvs/meanVars.csv")
-meanVarNames <- read_csv("joinTables/structure.csv")
+meanVars <- read_csv("outputCsvs/meanVars.csv", guess_max = 10000)
+structure_join <- read_csv("joinTables/structure.csv")
 
-meanVars <- left_join(meanVars, meanVarNames)
-meanVars <- left_join(meanVars, parkJoiner)
+meanVars <- left_join(meanVars, structure_join)
+meanVars <- left_join(meanVars, park_join)
 
-structVars <- meanVarNames$var[4:6]
+structVars <- structure_join$var[4:6]
 
 structurePlot <- function(inPark){
   indivStructPlot <- function(variable){
     
     structure <- structure %>% 
       filter(var == variable)
+    
+    unit <- structure %>%
+      pull(unit)
     
     structWmean <- structure %>% 
       group_by(full_name, ppa_gpe, var2s) %>%
@@ -46,9 +48,9 @@ structurePlot <- function(inPark){
       geom_point(data = structWmean, aes(x = fct_rev(ppa_gpe), y = wmean), shape = 1, size = 5) +
       geom_point(data = outliers, aes(x = fct_rev(ppa_gpe), y = MEAN), alpha = 0.5) +
       #scale_size_identity(guide = "legend", labels = "Weighted Mean by Area") +
-      facet_wrap(~ var2s, scale = "free_y") +
+      #facet_wrap(~ var2s, scale = "free_y") +
       labs(x = "", 
-           y = "Subzone Mean", 
+           y = unit, 
            #subtitle = "Note the traditional median in this plot is the mean weighted by area",
            size = "") +
       theme_bw() +
@@ -62,7 +64,9 @@ structurePlot <- function(inPark){
     
     saveLoc = file.path(newDir, paste0(variable, "_plot.png"))
     
-    ggsave(saveLoc, figure, device = "png", width = 2.5)
+    ggsave(saveLoc, figure, device = "png", height = 2.5, width = 1.25)
+    
+    figure
   }
   
   #structure
@@ -111,12 +115,7 @@ structurePlot <- function(inPark){
   
   saveLoc = file.path(newDir, "structure_plot.png")
   
-  ggsave(saveLoc, figure, device = "png")
+  ggsave(saveLoc, figure, device = "png", bg = "transparent", height = 7, width = 7)
   
-  map(structVars, indivStructPlot)
+  figures <- map(structVars, indivStructPlot)
 }
-
-parks <- unique(meanVars$park)
-
-map(parks, structurePlot)
-

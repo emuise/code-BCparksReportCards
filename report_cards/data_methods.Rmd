@@ -1,0 +1,29 @@
+---
+title: "Data and Methodology"
+author: "Evan Muise and Nicholas Coops"
+output: html_document
+bibliography: references.bib
+csl: remote-sensing-of-environment.csl
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Data
+
+The data for this project was primarily sourced from the National Forest Information System's Satellite Forest Information for Canada ([found here](https://opendata.nfis.org/mapserver/nfis-change_eng.html){.uri}). Specifically, the Landcover 2015 [Land Cover and Forest Cover, @white2017; @hermosilla2016; @hermosilla2017; @hermosilla2018], Change Type and Change Year [Disturbances and Stressors, @white2017; @hermosilla2017], Forest Lorey's Height 2015 [Canopy Height, @matasci2018], Forest Percentage Above 2m 2015 [Canopy Cover, @matasci2018], and Forest Total Aboveground Biomass 2015 [Aboveground Biomass, @matasci2018] . Ancillary datasets used include the ASTER DEM for British Columbia [@nasa/meti/aist/japanspacesystems2001].
+
+# Methodology
+
+## Greater Protected Ecosystem Delineation
+
+The greater protected ecosystem was delineated for each park (or protected area complex) by buffering into the biogeoclimatic ecosystem classification subzones that share a border with the protected area. The buffer was iteratively increased until an area equal in size to that of the protected area was generated. Other protected areas and marine waters were excluded from these buffers.
+
+## Park Selection
+
+Parks were selected based on their size (must be greater than 100ha), their [IUCN protected area classification](https://www.iucn.org/theme/protected-areas/about/protected-area-categories) [only classes Ia, Ib, II, IV, as per @bolton2019], and whether a suitable greater protected ecosystem could be generated.
+
+\newpage
+
+# References

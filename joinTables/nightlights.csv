@@ -1,5 +1,5 @@
-class_val,class_name,relevel
-1,No Nightlights,1
-2,Residential,2
-3,Transportation Facilities and Urban Infrastructure,3
-4,Commercial Centres,4
+class_val,class_name,relevel,colour
+1,No Nightlights,1,#00000000
+2,Residential,2,#B8AE87
+3,Transportation Facilities and Urban Infrastructure,3,#9F6355
+4,Commercial Centres,4,#4C0000
